@@ -9,7 +9,7 @@
 [![automated-testing](https://github.com/NMe/watch-jelly-together/actions/workflows/ci.yaml/badge.svg?branch=master&event=push)](https://github.com/NMe84/watch-jelly-together/actions/workflows/ci.yaml)
 [![codecov](https://codecov.io/gh/NMe84/watch-jelly-together/graph/badge.svg?token=a15cf111-ae13-4b0c-bb59-be10ebfbe038)](https://codecov.io/gh/NMe84/watch-jelly-together)
 [![phpstan](https://img.shields.io/badge/PHPStan-max-brightgreen)](https://github.com/NMe84/watch-jelly-together/blob/master/phpstan.neon)
-[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2NMe84%2Fwatch-jelly-together%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/NMe84/watch-jelly-together/master)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FNMe84%2Fwatch-jelly-together%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/NMe84/watch-jelly-together/master)
 
 ## Work in progress!
 
