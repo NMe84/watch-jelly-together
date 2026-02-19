@@ -1,0 +1,5 @@
+generic:
+    toggle_navigation: "Toggle navigation"
+
+menu:
+    dashboard: "Dashboard"

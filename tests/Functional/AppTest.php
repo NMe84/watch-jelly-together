@@ -24,9 +24,7 @@ class AppTest extends FunctionalTestCase
         $this->assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
-    /**
-     * @return iterable<string, string[]>
-     */
+    /** @return iterable<string, string[]> */
     public static function publicUrlProvider(): iterable
     {
         return static::mapFlatList([
@@ -42,9 +40,7 @@ class AppTest extends FunctionalTestCase
         $this->assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
     }
 
-    /**
-     * @return iterable<string, string[]>
-     */
+    /** @return iterable<string, string[]> */
     public static function unwantedUrlProvider(): iterable
     {
         return [
