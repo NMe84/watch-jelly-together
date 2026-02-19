@@ -2,8 +2,6 @@ doctrine:
     dbal:
         driver: 'pdo_sqlite'
         path: '%kernel.project_dir%/var/%kernel.environment%.db'
-        options:
-            1002: "PRAGMA foreign_keys=ON"
 
         profiling_collect_backtrace: '%kernel.debug%'
     orm:
