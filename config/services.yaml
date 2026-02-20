@@ -1,5 +1,6 @@
 parameters:
     app.default_timezone: 'UTC'
+    app.jellyfin.url: 'http://localhost:8096'
 
 services:
     _defaults:

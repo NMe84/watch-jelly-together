@@ -24,7 +24,7 @@ class AppExtension extends AbstractExtension implements GlobalsInterface
     use ClockAwareTrait;
 
     public function __construct(
-        #[Autowire(env: 'JELLYFIN_URL')] private readonly string $jellyfinUrl,
+        #[Autowire(env: 'default:app.jellyfin.url:JELLYFIN_URL')] private readonly string $jellyfinUrl,
     ) {
     }
 
