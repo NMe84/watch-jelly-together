@@ -1,0 +1,3 @@
+user_connection:
+    users:
+        min_count: At least two users must be selected.

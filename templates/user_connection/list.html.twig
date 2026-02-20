@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block header %}{{ 'user_connection.list.header'|trans }}{% endblock %}
+{% block leader_text %}{{ 'user_connection.list.leader_text'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="mt-5 mb-1 text-lg-end">
+        <div class="btn-group">
+            <a href="{{ path('user_connection_sync_masterdata') }}" class="btn btn-primary">
+                <i class="fas fa-sync"></i>
+                {{ 'user_connection.action.sync_masterdata'|trans }}
+            </a>
+            <a href="{{ path('user_connection_create') }}" class="btn btn-success">
+                <i class="fas fa-plus"></i>
+                {{ 'user_connection.action.create'|trans }}
+            </a>
+        </div>
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>{{ 'user_connection.list.table.header.show'|trans }}</th>
+                <th>{{ 'user_connection.list.table.header.users'|trans }}</th>
+                <th>{{ 'user_connection.list.table.header.actions'|trans }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for connection in connections %}
+                <tr>
+                    <td>
+                        <a href="{{ jellyfin_show_link(connection.show) }}" target="_blank">
+                            {{ connection.show }}
+                        </a>
+                    </td>
+                    <td>
+                        {%- for user in connection.users -%}
+                            {{ user.name }}{% if not loop.last %}, {% endif %}
+                        {%- endfor -%}
+                    </td>
+                    <td>
+                        <form action="{{ path('user_connection_delete', { id: connection.id }) }}" method="post" class="btn-group" onsubmit="return confirm('{{ 'alert.confirm_delete'|trans }}');">
+                            <a href="{{ path('user_connection_edit', { id: connection.id }) }}" class="btn btn-primary btn-sm">
+                                <i class="fas fa-edit"></i>
+                                {{ 'generic.edit'|trans }}
+                            </a>
+                            <button class="btn btn-danger btn-sm">
+                                <i class="fas fa-trash"></i>
+                                {{ 'generic.delete'|trans }}
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="3">{{ 'user_connection.list.table.no_connections'|trans }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        {% if connections|length > 0 %}
+            <tfoot>
+                <tr>
+                    <th colspan="3">{{ 'generic.total_rows'|trans }}: {{ connections|length|format_number }}</th>
+                </tr>
+            </tfoot>
+        {% endif %}
+    </table>
+{% endblock %}

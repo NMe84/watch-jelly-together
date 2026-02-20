@@ -1,5 +1,9 @@
 twig:
     file_name_pattern: '*.twig'
+    date:
+        timezone: '%env(default:app.default_timezone:TZ)%'
+    form_themes:
+        - 'bootstrap_5_layout.html.twig'
 
 when@test:
     twig:

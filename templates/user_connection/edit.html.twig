@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block header -%}
+    {{ user_connection.id ?
+        'user_connection.edit.header'|trans({'show': user_connection.show.name, 'users': user_connection.users|map(u => u.name)|join(', ')}) :
+        'user_connection.create.header'|trans
+    }}
+{%- endblock %}
+{% block leader_text %}{{ user_connection.id ? 'user_connection.edit.leader_text'|trans : 'user_connection.create.leader_text'|trans }}{% endblock %}
+
+{% block body %}
+    <div class="form">
+        {{ form_start(form) }}
+            {{ form_row(form.show) }}
+            {{ form_row(form.users) }}
+
+            <div class="btn-group">
+                <button type="submit" class="btn btn-success">
+                    <i class="fas fa-save"></i>
+                    {{ 'generic.save'|trans }}
+                </button>
+                <a href="{{ path('user_connection_list') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    {{ 'generic.back_to_list'|trans }}
+                </a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

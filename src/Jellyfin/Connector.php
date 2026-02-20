@@ -89,14 +89,17 @@ readonly class Connector
                 ],
             ]);
 
-            /** @var array{Items?: array<int, array{Id: string, Name: string}>} $data */
+            /** @var array{Items?: array<int, array{Id: string, ServerId: string, Name: string}>} $data */
             $data = json_decode($response->getContent(), true);
             foreach ($data['Items'] ?? [] as $row) {
                 if (!($show = $this->em->getRepository(Show::class)->find($row['Id']))) {
-                    $show = new Show($row['Id'], $row['Name']);
+                    $show = new Show($row['Id'], $row['ServerId'], $row['Name']);
                     $this->em->persist($show);
                 }
-                $show->setName($row['Name']);
+                $show
+                    ->setName($row['Name'])
+                    ->setServerId($row['ServerId'])
+                ;
 
                 $this->em->flush();
             }

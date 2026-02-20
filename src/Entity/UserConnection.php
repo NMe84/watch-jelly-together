@@ -11,15 +11,18 @@ declare(strict_types=1);
 
 namespace App\Entity;
 
+use App\Repository\UserConnectionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-#[ORM\Entity]
+#[ORM\Entity(repositoryClass: UserConnectionRepository::class)]
 class UserConnection
 {
     #[ORM\Column, ORM\Id, ORM\GeneratedValue]
-    private int $id;
+    private ?int $id = null;
 
     /** @var Collection<string, User> */
     #[ORM\ManyToMany(targetEntity: User::class, cascade: ['persist'], fetch: 'EAGER', orphanRemoval: true, indexBy: 'id')]
@@ -33,16 +36,9 @@ class UserConnection
         $this->users = new ArrayCollection();
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function setId(int $id): static
-    {
-        $this->id = $id;
-
-        return $this;
     }
 
     /** @return Collection<string, User> */
@@ -83,5 +79,17 @@ class UserConnection
         $this->show = $show;
 
         return $this;
+    }
+
+    #[Assert\Callback]
+    public function validate(ExecutionContextInterface $context): void
+    {
+        if ($this->users->count() < 2) {
+            $context
+                ->buildViolation('user_connection.users.min_count')
+                ->atPath('users')
+                ->addViolation()
+            ;
+        }
     }
 }

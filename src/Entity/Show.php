@@ -22,12 +22,16 @@ class Show
     private string $id;
 
     #[ORM\Column]
+    private string $serverId;
+
+    #[ORM\Column]
     #[Assert\NotBlank]
     private string $name;
 
-    public function __construct(string $id, string $name = '')
+    public function __construct(string $id, string $serverId = '', string $name = '')
     {
         $this->id = $id;
+        $this->serverId = $serverId;
         $this->name = $name;
     }
 
@@ -39,6 +43,18 @@ class Show
     public function setId(string $id): static
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getServerId(): string
+    {
+        return $this->serverId;
+    }
+
+    public function setServerId(string $serverId): static
+    {
+        $this->serverId = $serverId;
 
         return $this;
     }

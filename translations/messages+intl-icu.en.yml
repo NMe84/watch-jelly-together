@@ -1,5 +1,43 @@
 generic:
-    toggle_navigation: "Toggle navigation"
+    back_to_list: Back to list
+    close: Close
+    delete: Delete
+    edit: Edit
+    save: Save
+    toggle_navigation: Toggle navigation
+    total_rows: Total rows
 
 menu:
-    dashboard: "Dashboard"
+    dashboard: Dashboard
+    user_connection_list: Connections
+
+user_connection:
+    action:
+        create: Create connection
+        sync_masterdata: Sync master data
+    alert:
+        deleted: The connection has successfully been deleted.
+        saved: The connection has been saved. Please allow some time for the watch states to be synced. Depending on the number of connected shows and users, this may take a while.
+        sync_queued: Your request to sync the user and show master data has been queued. Please allow some time for the sync to complete. Depending on the number of connected shows and users, this may take a while.
+    create:
+        header: Create new connection
+        leader_text: Use the form below to create a new connection between a show and any number of users. After creating the connection, the watch states for the show will be synced for these user. Depending on the number of connected shows and users, this may take a while.
+    edit:
+        header: Edit connection for {show} between users {users}
+        leader_text: Use the form below to create a new connection between a show and any number of users. After creating the connection, the watch states for the show will be synced for these user. Depending on the number of connected shows and users, this may take a while.
+    list:
+        header: User and show connections
+        leader_text: |-
+            This is an overview of all connections between shows and users currently known to the system.
+            You can freely add or delete any connection, but be aware that after deleting a connection,
+            the watch states for the show will stay as they are for each user. Once synced, you can't
+            revert the watch states to the state before the connection was estasblished. New watch activity
+            will of course no longer be synced after deletion.
+        table:
+            header:
+                show: Show
+                users: Users
+                actions: Actions
+            no_connections: There are currently no connections between shows and users. You can add a new connection by clicking the "Add connection" button.
+alert:
+    confirm_delete: Are you sure you want to remove this connection?
