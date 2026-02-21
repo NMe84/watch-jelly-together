@@ -101,7 +101,7 @@
     },
     "require-dev": {
         "ekino/phpstan-banned-code": "^3.0",
-        "friendsofphp/php-cs-fixer": "^3.94.1",
+        "friendsofphp/php-cs-fixer": "^3.94.2",
         "infection/infection": "^0.32.5",
         "phpstan/extension-installer": "^1.4.3",
         "phpstan/phpstan": "^2.1.39",
@@ -116,6 +116,6 @@
         "symfony/phpunit-bridge": "^8.0.3",
         "symfony/stopwatch": "^8.0",
         "symfony/web-profiler-bundle": "^8.0.4",
-        "zenstruck/foundry": "^2.9"
+        "zenstruck/foundry": "^2.9.2"
     }
 }
