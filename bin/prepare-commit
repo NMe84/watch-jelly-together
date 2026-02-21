@@ -5,6 +5,8 @@ cd $(dirname $0)/..
 vendor/bin/php-cs-fixer fix
 vendor/bin/phpstan
 
+bin/console -e test doctrine:schema:update --force
+
 # Clear cache and quarantine manually to avoid locking up with corrupted container
 php -d "zend.assertions=1" -d "xdebug.mode=coverage" vendor/bin/phpunit --testdox --coverage-text --display-warnings \
     --coverage-xml=build/coverage/coverage-xml --log-junit=build/coverage/junit.xml

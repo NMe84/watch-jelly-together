@@ -112,8 +112,10 @@
         "symfony/browser-kit": "^8.0.4",
         "symfony/css-selector": "^8.0",
         "symfony/debug-bundle": "^8.0",
+        "symfony/maker-bundle": "^1.66",
         "symfony/phpunit-bridge": "^8.0.3",
         "symfony/stopwatch": "^8.0",
-        "symfony/web-profiler-bundle": "^8.0.4"
+        "symfony/web-profiler-bundle": "^8.0.4",
+        "zenstruck/foundry": "^2.9"
     }
 }
