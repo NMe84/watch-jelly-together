@@ -20,13 +20,15 @@ use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-readonly class Connector
+class Connector
 {
+    private ?HttpClient $client = null;
+
     public function __construct(
-        #[Autowire(env: 'default:app.jellyfin.url:JELLYFIN_URL')] private string $baseUrl,
-        #[Autowire(env: 'JELLYFIN_API_KEY'), \SensitiveParameter] private string $apiKey,
-        private EntityManagerInterface $em,
-        private LoggerInterface $logger,
+        #[Autowire(env: 'default:app.jellyfin.url:JELLYFIN_URL')] private readonly string $baseUrl,
+        #[Autowire(env: 'JELLYFIN_API_KEY'), \SensitiveParameter] private readonly string $apiKey,
+        private readonly EntityManagerInterface $em,
+        private readonly LoggerInterface $logger,
     ) {
     }
 
@@ -112,11 +114,13 @@ readonly class Connector
 
     private function getClient(): HttpClientInterface
     {
-        return HttpClient::createForBaseUri($this->baseUrl, [
+        $this->client ??= HttpClient::createForBaseUri($this->baseUrl, [
             'headers' => [
                 'Accept' => 'application/json',
                 'X-MediaBrowser-Token' => $this->apiKey,
             ],
         ]);
+
+        return $this->client;
     }
 }
