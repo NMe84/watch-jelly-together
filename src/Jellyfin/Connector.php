@@ -22,7 +22,7 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Connector
 {
-    private ?HttpClient $client = null;
+    private ?HttpClientInterface $client = null;
 
     public function __construct(
         #[Autowire(env: 'default:app.jellyfin.url:JELLYFIN_URL')] private readonly string $baseUrl,
@@ -48,8 +48,7 @@ class Connector
     public function refreshUsers(): void
     {
         try {
-            $client = $this->getClient();
-            $response = $client->request(Request::METHOD_GET, '/Users');
+            $response = $this->getClient()->request(Request::METHOD_GET, '/Users');
 
             /** @var array<int, array{Id: string, Name: string}> $data */
             $data = json_decode($response->getContent(), true);
@@ -83,8 +82,7 @@ class Connector
     public function refreshShows(): void
     {
         try {
-            $client = $this->getClient();
-            $response = $client->request(Request::METHOD_GET, '/Items', [
+            $response = $this->getClient()->request(Request::METHOD_GET, '/Items', [
                 'query' => [
                     'IncludeItemTypes' => 'Series',
                     'Recursive' => 'true',
@@ -109,6 +107,62 @@ class Connector
             $this->logger->warning(sprintf('Failed to fetch tv shows from Jellyfin: %s', $e->getMessage()));
         } finally {
             $this->em->flush();
+        }
+    }
+
+    /** @param array<int, User> $users */
+    public function syncWatchStates(array $users, Show $show): void
+    {
+        $globalWatchData = $individualWatchData = [];
+        foreach ($users as $user) {
+            foreach ($this->getUserEpisodes($user, $show) as $episode) {
+                $individualWatchData[$user->getId()][$episode['Id']] = (bool) $episode['UserData']['Played'];
+                $globalWatchData[$episode['Id']] = ($globalWatchData[$episode['Id']] ?? false) || $episode['UserData']['Played'];
+            }
+        }
+
+        foreach ($globalWatchData as $episodeId => $isWatched) {
+            if ($isWatched) {
+                foreach ($users as $user) {
+                    if (empty($individualWatchData[$user->getId()][$episodeId] ?? false)) {
+                        // Only send the watch state if it wasn't already marked as watched for this user, to avoid unnecessary API calls
+                        $this->markPlayed($user->getId(), $episodeId);
+                        $this->logger->debug(sprintf('Marked episode %s as watched for user %s', $episodeId, $user->getName()));
+                    }
+                }
+            }
+        }
+    }
+
+    /** @return array<int, array{Id: string, Name: string, UserData: array{Played: bool}}> */
+    public function getUserEpisodes(User $user, Show $show): array
+    {
+        try {
+            $response = $this->getClient()->request(Request::METHOD_GET, sprintf('/Users/%s/Items', $user->getId()), [
+                'query' => [
+                    'IncludeItemTypes' => 'Episode',
+                    'ParentId' => $show->getId(),
+                    'Recursive' => 'true',
+                ],
+            ]);
+
+            /** @var array{Items?: array<int, array{Id: string, Name: string, UserData: array{Played: bool}}>} $data */
+            $data = json_decode($response->getContent(), true);
+
+            return $data['Items'] ?? [];
+        } catch (\Throwable $e) {
+            $this->logger->warning(sprintf('Failed to fetch episodes for user %s and show %s from Jellyfin: %s', $user->getName(), $show->getName(), $e->getMessage()));
+
+            return [];
+        }
+    }
+
+    public function markPlayed(string $userId, string $itemId): void
+    {
+        try {
+            $this->getClient()->request(Request::METHOD_POST, "/Users/$userId/PlayedItems/$itemId");
+        } catch (\Throwable $e) {
+            $this->logger->warning(sprintf('Failed to mark item %s as played for user %s: %s', $itemId, $userId, $e->getMessage()));
         }
     }
 
