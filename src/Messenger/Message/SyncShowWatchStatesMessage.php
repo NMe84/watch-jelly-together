@@ -11,7 +11,7 @@ declare(strict_types=1);
 
 namespace App\Messenger\Message;
 
-class SyncWatchStatesMessage implements MessageInterface
+class SyncShowWatchStatesMessage implements MessageInterface
 {
     public function __construct(
         private readonly string $userConnectionId,

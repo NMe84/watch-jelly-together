@@ -14,12 +14,12 @@ namespace App\Messenger\Handler;
 use App\Entity\Show;
 use App\Entity\UserConnection;
 use App\Jellyfin\Connector;
-use App\Messenger\Message\SyncWatchStatesMessage;
+use App\Messenger\Message\SyncShowWatchStatesMessage;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-readonly class SyncWatchStatesHandler
+readonly class SyncShowWatchStatesHandler
 {
     public function __construct(
         private Connector $connector,
@@ -29,7 +29,7 @@ readonly class SyncWatchStatesHandler
     }
 
     #[AsMessageHandler]
-    public function __invoke(SyncWatchStatesMessage $message): void
+    public function __invoke(SyncShowWatchStatesMessage $message): void
     {
         if ($connection = $this->em->getRepository(UserConnection::class)->find($message->getUserConnectionId())) {
             assert($connection->getShow() instanceof Show);
