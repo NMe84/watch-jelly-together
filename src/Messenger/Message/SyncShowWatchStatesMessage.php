@@ -11,14 +11,14 @@ declare(strict_types=1);
 
 namespace App\Messenger\Message;
 
-class SyncShowWatchStatesMessage implements MessageInterface
+readonly class SyncShowWatchStatesMessage implements MessageInterface
 {
     public function __construct(
-        private readonly string $userConnectionId,
+        private readonly int $userConnectionId,
     ) {
     }
 
-    public function getUserConnectionId(): string
+    public function getUserConnectionId(): int
     {
         return $this->userConnectionId;
     }
