@@ -110,7 +110,7 @@ class Connector
         }
     }
 
-    /** @param array<int, User> $users */
+    /** @param User[] $users */
     public function syncWatchStates(array $users, Show $show): void
     {
         $globalWatchData = $individualWatchData = [];
