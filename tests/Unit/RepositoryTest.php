@@ -12,14 +12,13 @@ declare(strict_types=1);
 namespace App\Tests\Unit;
 
 use App\Repository\UserConnectionRepository;
-use App\Story\AppStory;
+use App\Tests\Story\AppStory;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Foundry\Attribute\WithStory;
 
+#[WithStory(AppStory::class)]
 class RepositoryTest extends KernelTestCase
 {
-    use ResetDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();

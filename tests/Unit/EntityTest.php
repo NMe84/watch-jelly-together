@@ -13,21 +13,18 @@ namespace App\Tests\Unit;
 
 use App\Entity\Show;
 use App\Entity\User;
-use App\Story\AppStory;
+use App\Tests\Story\AppStory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
-use Zenstruck\Foundry\Test\ResetDatabase;
+use Zenstruck\Foundry\Attribute\WithStory;
 
+#[WithStory(AppStory::class)]
 class EntityTest extends KernelTestCase
 {
-    use ResetDatabase;
-
     protected function setUp(): void
     {
         parent::setUp();
-
         self::bootKernel();
-        AppStory::load();
     }
 
     public function testShow(): void

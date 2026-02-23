@@ -9,11 +9,11 @@
 
 declare(strict_types=1);
 
-namespace App\Story;
+namespace App\Tests\Story;
 
-use App\Factory\ShowFactory;
-use App\Factory\UserConnectionFactory;
-use App\Factory\UserFactory;
+use App\Tests\Factory\ShowFactory;
+use App\Tests\Factory\UserConnectionFactory;
+use App\Tests\Factory\UserFactory;
 use Zenstruck\Foundry\Attribute\AsFixture;
 use Zenstruck\Foundry\Story;
 
