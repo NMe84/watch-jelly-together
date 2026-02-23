@@ -22,13 +22,12 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class Connector
 {
-    private ?HttpClientInterface $client = null;
-
     public function __construct(
         #[Autowire(env: 'default:app.jellyfin.url:JELLYFIN_URL')] private readonly string $baseUrl,
-        #[Autowire(env: 'JELLYFIN_API_KEY'), \SensitiveParameter] private readonly string $apiKey,
+        #[Autowire(env: 'default:app.jellyfin.api_key:JELLYFIN_API_KEY'), \SensitiveParameter] private readonly string $apiKey,
         private readonly EntityManagerInterface $em,
         private readonly LoggerInterface $logger,
+        private ?HttpClientInterface $client = null,
     ) {
     }
 
