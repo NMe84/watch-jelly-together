@@ -121,6 +121,7 @@ class ConnectorTest extends KernelTestCase
         $service->refreshShows();
     }
 
+    #[AllowMockObjectsWithoutExpectations]
     public function testGetUserEpisodesReturnsEpisodes(): void
     {
         $user = new User('user-1', 'Test User');
