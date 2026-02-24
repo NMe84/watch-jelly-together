@@ -24,6 +24,7 @@
         "ext-intl": "*",
         "ext-mbstring": "*",
         "doctrine/doctrine-bundle": "^3.2.2",
+        "doctrine/migrations": "^3.9",
         "doctrine/orm": "^3.6.2",
         "dragonmantank/cron-expression": "^3.6",
         "symfony/console": "^8.0.4",

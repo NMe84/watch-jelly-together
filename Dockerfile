@@ -26,7 +26,9 @@ RUN mkdir -p var/cache var/log && chmod -R 777 var
 
 # Copy supervisor config
 COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY docker/entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 EXPOSE 8844
 
-CMD ["/usr/bin/supervisord", "-n"]
+ENTRYPOINT ["/entrypoint.sh"]
