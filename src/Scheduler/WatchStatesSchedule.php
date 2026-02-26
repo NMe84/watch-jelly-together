@@ -32,8 +32,8 @@ readonly class WatchStatesSchedule implements ScheduleProviderInterface
         return new SymfonySchedule()
             ->stateful($this->cache)
             ->processOnlyLastMissedRun(true)
-            ->with(RecurringMessage::cron('*/5 * * * *', new SyncWatchStatesMessage()))
-            ->with(RecurringMessage::cron('0 * * * *', new SyncMasterDataMessage()))
+            ->add(RecurringMessage::cron('*/5 * * * *', new SyncWatchStatesMessage()))
+            ->add(RecurringMessage::cron('0 * * * *', new SyncMasterDataMessage()))
         ;
     }
 }
