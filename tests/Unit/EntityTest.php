@@ -13,9 +13,12 @@ namespace App\Tests\Unit;
 
 use App\Entity\Show;
 use App\Entity\User;
+use App\Entity\UserConnection;
 use App\Tests\Story\AppStory;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Zenstruck\Foundry\Attribute\WithStory;
 
 #[WithStory(AppStory::class)]
@@ -27,7 +30,7 @@ class EntityTest extends KernelTestCase
         self::bootKernel();
     }
 
-    public function testShow(): void
+    public function testShowProperties(): void
     {
         $em = $this->getEntityManager();
 
@@ -52,9 +55,10 @@ class EntityTest extends KernelTestCase
         self::assertEquals('D', $newShow->getId());
         self::assertEquals('4', $newShow->getServerId());
         self::assertEquals('Show D', $newShow->getName());
+        self::assertEquals('Show D', (string) $newShow);
     }
 
-    public function testUser(): void
+    public function testUserProperties(): void
     {
         $em = $this->getEntityManager();
 
@@ -75,6 +79,45 @@ class EntityTest extends KernelTestCase
         ;
         self::assertEquals('N', $newUser->getId());
         self::assertEquals('User N', $newUser->getName());
+        self::assertEquals('User N', (string) $newUser);
+    }
+
+    public function testUserConnectionProperties(): void
+    {
+        $em = $this->getEntityManager();
+
+        $userConnection = $em->getRepository(UserConnection::class)->find(1);
+        self::assertInstanceOf(UserConnection::class, $userConnection);
+        self::assertEquals(1, $userConnection->getId());
+        self::assertCount(2, $userConnection->getUsers());
+        self::assertInstanceOf(Show::class, $userConnection->getShow());
+        self::assertEquals('Show A', $userConnection->getShow()->getName());
+
+        $userConnection = $userConnection->setUsers(new ArrayCollection([]));
+        self::assertCount(0, $userConnection->getUsers());
+    }
+
+    public function testUserConnectionValidation(): void
+    {
+        $user1 = new User('uc1', 'User UC1');
+        $user2 = new User('uc2', 'User UC2');
+        $show = new Show('s1', 'srv1', 'Show S1');
+
+        $userConnection = new UserConnection();
+        $userConnection->setShow($show);
+        $userConnection->addUser($user1);
+
+        $validator = $this->getValidator();
+        $violations = $validator->validate($userConnection);
+        self::assertCount(1, $violations);
+
+        $userConnection->addUser($user2);
+        $violations = $validator->validate($userConnection);
+        self::assertCount(0, $violations);
+
+        $userConnection->removeUser($user1);
+        $violations = $validator->validate($userConnection);
+        self::assertCount(1, $violations);
     }
 
     private function getEntityManager(): EntityManagerInterface
@@ -83,5 +126,13 @@ class EntityTest extends KernelTestCase
         $this->assertInstanceOf(EntityManagerInterface::class, $em);
 
         return $em;
+    }
+
+    private function getValidator(): ValidatorInterface
+    {
+        $validator = $this->getContainer()->get('validator');
+        $this->assertInstanceOf(ValidatorInterface::class, $validator);
+
+        return $validator;
     }
 }
