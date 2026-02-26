@@ -1,10 +1,17 @@
 FROM php:8.5-cli
 
+# Set environment variables
+ENV APP_ENV=prod
+
 # Install system deps
 RUN apt-get update && apt-get install -y \
+    build-essential \
     git \
-    unzip \
+    libicu-dev \
+    libonig-dev \
+    libsqlite3-dev \
     supervisor \
+    unzip \
     && rm -rf /var/lib/apt/lists/*
 
 # Install PHP extensions
