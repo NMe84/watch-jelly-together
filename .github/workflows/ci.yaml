@@ -65,7 +65,7 @@ jobs:
               if: ${{ matrix.dependencies != 'lowest' && !matrix.experimental }}
 
             - name: Run automated tests
-              run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml --coverage-xml=build/coverage
+              run: vendor/bin/phpunit --coverage-text --coverage-clover=coverage.xml --coverage-xml=build/coverage --log-junit=build/coverage/junit.xml
 
             - name: Upload coverage reports to Codecov
               uses: codecov/codecov-action@v5
