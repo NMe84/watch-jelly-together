@@ -40,6 +40,62 @@ class ConnectorTest extends KernelTestCase
         self::assertContains('B', $showIds);
     }
 
+    public function testGetShowsDoesNotCallRefreshWhenDataExists(): void
+    {
+        $connector = $this->getMockBuilder(Connector::class)
+            ->onlyMethods(['refreshShows'])
+            ->setConstructorArgs([
+                'http://localhost:8096',
+                '123',
+                $this->getContainer()->get(EntityManagerInterface::class),
+                $this->getContainer()->get(LoggerInterface::class),
+                null,
+            ])
+            ->getMock()
+        ;
+
+        $connector->expects(self::never())
+            ->method('refreshShows')
+        ;
+
+        $shows = $connector->getShows();
+
+        self::assertCount(2, $shows);
+    }
+
+    #[AllowMockObjectsWithoutExpectations]
+    public function testGetShowsCallsRefreshWhenDatabaseEmpty(): void
+    {
+        $showRepository = $this->createMock(EntityRepository::class);
+        $showRepository->method('findBy')
+            ->willReturn([])
+        ;
+
+        $em = $this->createMock(EntityManagerInterface::class);
+        $em->method('getRepository')
+            ->willReturn($showRepository)
+        ;
+
+        $connector = $this->getMockBuilder(Connector::class)
+            ->onlyMethods(['refreshShows'])
+            ->setConstructorArgs([
+                'http://localhost:8096',
+                '123',
+                $em,
+                $this->createMock(LoggerInterface::class),
+                null,
+            ])
+            ->getMock()
+        ;
+
+        $connector->expects(self::once())
+            ->method('refreshShows');
+
+        $shows = $connector->getShows();
+
+        self::assertSame([], $shows);
+    }
+
     public function testGetUsers(): void
     {
         $users = $this->getConnector()->getUsers();

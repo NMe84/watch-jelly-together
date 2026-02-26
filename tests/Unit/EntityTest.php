@@ -39,6 +39,19 @@ class EntityTest extends KernelTestCase
 
         $nonExistentShow = $em->getRepository(Show::class)->find('NonExistent');
         self::assertNull($nonExistentShow);
+
+        $newShow = new Show('C', '3', 'Show C');
+        self::assertEquals('C', $newShow->getId());
+        self::assertEquals('3', $newShow->getServerId());
+        self::assertEquals('Show C', $newShow->getName());
+        $newShow
+            ->setId('D')
+            ->setServerId('4')
+            ->setName('Show D')
+        ;
+        self::assertEquals('D', $newShow->getId());
+        self::assertEquals('4', $newShow->getServerId());
+        self::assertEquals('Show D', $newShow->getName());
     }
 
     public function testUser(): void
@@ -52,6 +65,16 @@ class EntityTest extends KernelTestCase
 
         $nonExistentUser = $em->getRepository(User::class)->find('NonExistent');
         self::assertNull($nonExistentUser);
+
+        $newUser = new User('Z', 'User Z');
+        self::assertEquals('Z', $newUser->getId());
+        self::assertEquals('User Z', $newUser->getName());
+        $newUser
+            ->setName('User N')
+            ->setId('N')
+        ;
+        self::assertEquals('N', $newUser->getId());
+        self::assertEquals('User N', $newUser->getName());
     }
 
     private function getEntityManager(): EntityManagerInterface
