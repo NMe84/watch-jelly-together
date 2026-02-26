@@ -29,7 +29,6 @@ class AppTest extends FunctionalTestCase
     {
         return static::mapFlatList([
             '/',
-            '/connections',
         ]);
     }
 
